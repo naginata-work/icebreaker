@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html lang="ja">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Icebreaker Question Generator / アイスブレイク質問ジェネレーター</title>
+<meta name="description" content="会議・パーティー・チームビルディング用の話題出しツール。ボタン1つで質問をランダム表示。">
+<script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4214020669195548"
+     crossorigin="anonymous"></script>
+<style>
+  :root {
+    --bg: #14111c; --card: #201a2c; --text: #f6f2fb; --sub: #a89ac4;
+    --accent: #fb7185; --accent2: #38d9c4; --border: #2f2740;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; font-family: "Hiragino Kaku Gothic ProN", "Segoe UI", Arial, sans-serif;
+    background: var(--bg); color: var(--text); padding: 16px;
+  }
+  .wrap { max-width: 480px; margin: 0 auto; }
+  .top-row { display: flex; justify-content: flex-end; margin-bottom: 4px; }
+  .lang-btn { background: none; border: 1px solid var(--border); color: var(--sub); border-radius: 6px; padding: 4px 10px; font-size: 12px; cursor: pointer; }
+  h1 { font-size: 21px; text-align: center; margin: 4px 0 4px; }
+  .lead { text-align: center; color: var(--sub); font-size: 13px; margin-bottom: 18px; line-height: 1.6; }
+  .card { background: var(--card); border: 1px solid var(--border); border-radius: 14px; padding: 18px; margin-bottom: 14px; }
+  .tabs { display: flex; gap: 8px; margin-bottom: 16px; }
+  .tabs button {
+    flex: 1; padding: 9px 4px; border: 1px solid var(--border); border-radius: 8px;
+    background: none; color: var(--sub); font-size: 12.5px; cursor: pointer;
+  }
+  .tabs button.active { background: var(--accent); color: #2a0a10; border-color: var(--accent); font-weight: bold; }
+  .output-box {
+    background: #171220; border: 1px solid var(--border); border-radius: 10px;
+    padding: 26px 16px; font-size: 18px; font-weight: bold; text-align: center; margin-bottom: 14px;
+    min-height: 80px; display: flex; align-items: center; justify-content: center; line-height: 1.5;
+  }
+  .gen-btn, .copy-btn { width: 100%; padding: 12px; border: none; border-radius: 10px; font-size: 15px; font-weight: bold; cursor: pointer; margin-top: 4px; }
+  .gen-btn { background: var(--accent); color: #2a0a10; }
+  .copy-btn { background: none; border: 1px solid var(--border); color: var(--text); font-weight: normal; font-size: 13.5px; margin-top: 8px; }
+  .footer-links { text-align: center; font-size: 12px; color: var(--sub); margin-top: 4px; line-height: 1.8; }
+  .footer-links a { color: var(--accent2); text-decoration: none; }
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="top-row"><button class="lang-btn" id="langBtn">EN</button></div>
+  <h1 id="title">💬 アイスブレイク質問ジェネレーター</h1>
+  <p class="lead" id="lead">会議・パーティー・チームビルディングの話題出しに。</p>
+
+  <div class="card">
+    <div class="tabs">
+      <button id="tabWork" class="active"></button>
+      <button id="tabParty"></button>
+      <button id="tabTeam"></button>
+    </div>
+    <div class="output-box" id="output">-</div>
+    <button class="gen-btn" id="genBtn"></button>
+    <button class="copy-btn" id="copyBtn"></button>
+  </div>
+
+  <p class="footer-links" id="footerLinks"></p>
+</div>
+
+<script>
+  const QUESTIONS = {
+    ja: {
+      work: [
+        '仕事の中で自動化できたら一番嬉しい作業は?',
+        '仕事を楽にしてくれている、お気に入りのツールやアプリは?',
+        'これまでにもらった一番印象に残るアドバイスは?',
+        '仕事にテーマソングをつけるなら?',
+        '今年身につけたいスキルは?',
+        '人生で最初にやったアルバイト・仕事は?',
+        '自分なりの集中する工夫は?',
+        '1日1時間自由な時間が増えたら、何に使う?',
+        '仕事のやり方が変わった本やポッドキャストは?',
+        '今月学んだ、一番役に立ったことは?',
+        '1日だけ同僚と仕事を交換できるなら、誰と?',
+        '理想の仕事の始め方は?',
+        '自分が誇れるプロジェクトは?',
+        '仕事中に必ず笑ってしまうことは?',
+        '1ヶ月だけどこでも働けるなら、どこに行く?'
+      ],
+      party: [
+        '十八番のカラオケの曲は?',
+        '1日だけ超能力を持てるなら何が欲しい?',
+        '今まで食べた中で一番美味しかったものは?',
+        'ずっとやってみたかった趣味は?',
+        'タイムトラベルできるなら、どの時代に行きたい?',
+        '何度でも観たくなる映画は?',
+        '今までで一番衝動的にやったことは?',
+        '一瞬でマスターできるスキルがあるなら?',
+        'ホッとする食べ物は?',
+        'いつか行ってみたい場所は?',
+        '今までで一番嬉しかったプレゼントは?',
+        '自分にテーマソングをつけるなら?',
+        '好きな季節とその理由は?',
+        '意外と驚かれる自分の特技・雑学は?',
+        '一緒に食事してみたい架空のキャラクターは?'
+      ],
+      team: [
+        'このチームに貢献できている自分の強みは?',
+        '今、学んでいることは?',
+        '勝利や成果を祝う、自分なりのやり方は?',
+        'このチームを動物に例えるなら?',
+        '失敗から学んだ教訓は?',
+        '自分のモチベーションになっているものは?',
+        '始めてみたいチームの伝統は?',
+        'チームの働き方に1つルールを追加できるなら?',
+        'このチームに感謝していることは?',
+        '今期、楽しみにしている目標は?',
+        '忙しい週の後、自分なりのリフレッシュ方法は?',
+        'チームにマスコットを作るなら?',
+        '今週の小さな勝利で祝いたいことは?',
+        '集中力を保つために役立っていることは?',
+        'このチームの誰かに教えてもらったスキルは?'
+      ]
+    },
+    en: {
+      work: [
+        "If you could automate one part of your job, what would it be?",
+        "What's a small tool or app that makes your workday easier?",
+        "What's the best piece of advice you've received at work?",
+        "If your job had a theme song, what would it be?",
+        "What's one skill you'd like to learn this year?",
+        "What was your first-ever job?",
+        "What's your go-to productivity trick?",
+        "If you had an extra hour every day, how would you spend it?",
+        "What's a book or podcast that changed how you work?",
+        "What's the most useful thing you learned this month?",
+        "If you could swap jobs with a coworker for a day, who would it be?",
+        "What's your ideal way to start the workday?",
+        "What's a project you're proud of?",
+        "What's one thing that always makes you laugh at work?",
+        "If you could work from anywhere for a month, where would you go?"
+      ],
+      party: [
+        "What's your go-to karaoke song?",
+        "If you could have any superpower for a day, what would it be?",
+        "What's the best meal you've ever had?",
+        "What's a hobby you've always wanted to try?",
+        "If you could time travel to any decade, which one?",
+        "What's your favorite movie to rewatch?",
+        "What's the most spontaneous thing you've ever done?",
+        "If you could instantly master any skill, what would it be?",
+        "What's your comfort food?",
+        "What's a place you'd love to visit someday?",
+        "What's the best gift you've ever received?",
+        "If you had a theme song, what would it be?",
+        "What's your favorite season and why?",
+        "What's a fun fact about you that surprises people?",
+        "If you could have dinner with any fictional character, who?"
+      ],
+      team: [
+        "What's a strength you bring to this team?",
+        "What's something you're currently learning?",
+        "What's your favorite way to celebrate a win?",
+        "If our team were an animal, what would it be?",
+        "What's a lesson a failure taught you?",
+        "What motivates you to do your best work?",
+        "What's a team tradition you'd like to start?",
+        "If you could add one rule to how our team works, what would it be?",
+        "What's something you appreciate about this team?",
+        "What's a goal you're excited about this quarter?",
+        "What's your favorite way to unwind after a busy week?",
+        "If we had a team mascot, what should it be?",
+        "What's a small win from this week worth celebrating?",
+        "What's one thing that helps you focus?",
+        "What's a skill someone on this team taught you?"
+      ]
+    }
+  };
+
+  const I18N = {
+    ja: {
+      title: '💬 アイスブレイク質問ジェネレーター',
+      lead: '会議・パーティー・チームビルディングの話題出しに。',
+      tabWork: '仕事の会議', tabParty: 'パーティー', tabTeam: 'チームビルディング',
+      genBtn: '質問を出す',
+      copyBtn: 'コピーする',
+      copied: 'コピーしました!',
+      footerLinks: '他のツールも作っています → <a href="https://naginata-work.github.io/team-shuffler/" target="_blank" rel="noopener">チーム分け</a> / <a href="https://naginata-work.github.io/name-generator/" target="_blank" rel="noopener">名前生成</a>'
+    },
+    en: {
+      title: '💬 Icebreaker Question Generator',
+      lead: 'A quick source of conversation starters for meetings, parties, and team building.',
+      tabWork: 'Work meeting', tabParty: 'Party', tabTeam: 'Team building',
+      genBtn: 'Generate',
+      copyBtn: 'Copy',
+      copied: 'Copied!',
+      footerLinks: 'Also made these → <a href="https://naginata-work.github.io/team-shuffler/" target="_blank" rel="noopener">Team Shuffler</a> / <a href="https://naginata-work.github.io/name-generator/" target="_blank" rel="noopener">Name Generator</a>'
+    }
+  };
+
+  function loadLang() { try { return localStorage.getItem('icebreakerLang'); } catch (e) { return null; } }
+  function saveLang(l) { try { localStorage.setItem('icebreakerLang', l); } catch (e) {} }
+  let lang = loadLang() === 'en' ? 'en' : 'ja';
+  function t() { return I18N[lang]; }
+
+  let mode = 'work';
+  let current = '';
+
+  function generate() {
+    const list = QUESTIONS[lang][mode];
+    current = list[Math.floor(Math.random() * list.length)];
+    document.getElementById('output').textContent = current;
+  }
+
+  document.getElementById('genBtn').addEventListener('click', generate);
+
+  function setMode(newMode, btnId) {
+    mode = newMode;
+    ['tabWork', 'tabParty', 'tabTeam'].forEach(id => document.getElementById(id).classList.remove('active'));
+    document.getElementById(btnId).classList.add('active');
+    generate();
+  }
+  document.getElementById('tabWork').addEventListener('click', () => setMode('work', 'tabWork'));
+  document.getElementById('tabParty').addEventListener('click', () => setMode('party', 'tabParty'));
+  document.getElementById('tabTeam').addEventListener('click', () => setMode('team', 'tabTeam'));
+
+  document.getElementById('copyBtn').addEventListener('click', async () => {
+    if (!current) return;
+    try {
+      await navigator.clipboard.writeText(current);
+      const btn = document.getElementById('copyBtn');
+      const original = btn.textContent;
+      btn.textContent = t().copied;
+      setTimeout(() => { btn.textContent = original; }, 1500);
+    } catch { alert(current); }
+  });
+
+  function renderStaticText() {
+    document.getElementById('title').textContent = t().title;
+    document.getElementById('lead').textContent = t().lead;
+    document.getElementById('tabWork').textContent = t().tabWork;
+    document.getElementById('tabParty').textContent = t().tabParty;
+    document.getElementById('tabTeam').textContent = t().tabTeam;
+    document.getElementById('genBtn').textContent = t().genBtn;
+    document.getElementById('copyBtn').textContent = t().copyBtn;
+    document.getElementById('footerLinks').innerHTML = t().footerLinks;
+    generate();
+  }
+
+  document.getElementById('langBtn').addEventListener('click', () => {
+    lang = lang === 'ja' ? 'en' : 'ja';
+    saveLang(lang);
+    document.getElementById('langBtn').textContent = lang === 'ja' ? 'EN' : 'JA';
+    renderStaticText();
+  });
+
+  document.getElementById('langBtn').textContent = lang === 'ja' ? 'EN' : 'JA';
+  renderStaticText();
+</script>
+</body>
+</html>
