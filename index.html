@@ -59,7 +59,25 @@
     <button class="copy-btn" id="copyBtn"></button>
   </div>
 
+  <div class="card" style="font-size:13px; line-height:1.9; color:var(--sub);">
+    <h2 id="aboutTitle" style="font-size:15px; color:var(--text); margin:0 0 8px;"></h2>
+    <p id="aboutBody1" style="margin:0 0 10px;"></p>
+    <p id="aboutBody2" style="margin:0;"></p>
+  </div>
+
+  <div class="card" style="font-size:13px; line-height:1.9; color:var(--sub);">
+    <h2 id="faqTitle" style="font-size:15px; color:var(--text); margin:0 0 10px;"></h2>
+    <p id="faq1Q" style="margin:0 0 4px; color:var(--text); font-weight:bold;"></p>
+    <p id="faq1A" style="margin:0 0 12px;"></p>
+    <p id="faq2Q" style="margin:0 0 4px; color:var(--text); font-weight:bold;"></p>
+    <p id="faq2A" style="margin:0;"></p>
+  </div>
+
   <p class="footer-links" id="footerLinks"></p>
+  <p style="text-align:center; font-size:11px; color:var(--sub); margin-top:4px;">
+    <a href="https://naginata-work.github.io/" style="color:var(--sub);" id="allToolsLink"></a> ・
+    <a href="https://naginata-work.github.io/privacy.html" style="color:var(--sub);" id="privacyLink"></a>
+  </p>
 </div>
 
 <script>
@@ -180,7 +198,15 @@
       genBtn: '質問を出す',
       copyBtn: 'コピーする',
       copied: 'コピーしました!',
-      footerLinks: '他のツールも作っています → <a href="https://naginata-work.github.io/team-shuffler/" target="_blank" rel="noopener">チーム分け</a> / <a href="https://naginata-work.github.io/name-generator/" target="_blank" rel="noopener">名前生成</a>'
+      footerLinks: '他のツールも作っています → <a href="https://naginata-work.github.io/team-shuffler/" target="_blank" rel="noopener">チーム分け</a> / <a href="https://naginata-work.github.io/name-generator/" target="_blank" rel="noopener">名前生成</a>',
+      aboutTitle: '使い方について',
+      aboutBody1: '会議の冒頭や初対面のメンバーが集まる場で「では自己紹介を」と言われても、何を話せばいいか悩んでしまう人は少なくありません。ちょっとした質問が1つあるだけで、会話の糸口はぐっと見つけやすくなります。',
+      aboutBody2: '「仕事の会議」「パーティー」「チームビルディング」の3カテゴリから選んで「質問を出す」を押すだけで、それぞれの場に合った質問がランダムに表示されます。収録している質問はいずれも、健康・宗教・政治・収入など答えにくい話題を避けた、安全に使えるものだけを選んでいます。',
+      faqTitle: 'よくある質問',
+      faq1Q: '同じ質問が続けて出ることはある?',
+      faq1A: '各カテゴリ15問の中からランダムに1問を選ぶ仕様のため、まれに近いタイミングで同じ質問が出ることがあります。気になる場合はもう一度「質問を出す」を押してください。',
+      faq2Q: 'オンライン会議でも使える?',
+      faq2A: 'はい。画面共有をしながら質問を表示したり、チャットに貼り付けて共有したりする使い方に向いています。「コピー」ボタンで質問文をそのままコピーできます。',
     },
     en: {
       title: '💬 Icebreaker Question Generator',
@@ -189,7 +215,15 @@
       genBtn: 'Generate',
       copyBtn: 'Copy',
       copied: 'Copied!',
-      footerLinks: 'Also made these → <a href="https://naginata-work.github.io/team-shuffler/" target="_blank" rel="noopener">Team Shuffler</a> / <a href="https://naginata-work.github.io/name-generator/" target="_blank" rel="noopener">Name Generator</a>'
+      footerLinks: 'Also made these → <a href="https://naginata-work.github.io/team-shuffler/" target="_blank" rel="noopener">Team Shuffler</a> / <a href="https://naginata-work.github.io/name-generator/" target="_blank" rel="noopener">Name Generator</a>',
+      aboutTitle: 'How it works',
+      aboutBody1: 'Being asked to "introduce yourself" at the start of a meeting or when meeting new people can put a lot of people on the spot. Having one small question ready makes it much easier to break the ice.',
+      aboutBody2: 'Pick from "Work meeting," "Party," or "Team building," then hit "Generate" for a random, context-appropriate question. Every question in the list was chosen to be safe and inclusive — nothing about health, religion, politics, or income.',
+      faqTitle: 'FAQ',
+      faq1Q: 'Can the same question come up twice in a row?',
+      faq1A: "Each category picks randomly from 15 questions, so a repeat can occasionally happen close together. Just hit \"Generate\" again if you'd like a different one.",
+      faq2Q: 'Does this work for remote meetings?',
+      faq2A: "Yes — it's well suited to sharing your screen or pasting a question into chat. The \"Copy\" button copies the question text directly.",
     }
   };
 
@@ -239,6 +273,18 @@
     document.getElementById('genBtn').textContent = t().genBtn;
     document.getElementById('copyBtn').textContent = t().copyBtn;
     document.getElementById('footerLinks').innerHTML = t().footerLinks;
+    document.getElementById('aboutTitle').textContent = t().aboutTitle;
+    document.getElementById('aboutBody1').textContent = t().aboutBody1;
+    document.getElementById('aboutBody2').textContent = t().aboutBody2;
+    document.getElementById('faqTitle').textContent = t().faqTitle;
+    document.getElementById('faq1Q').textContent = t().faq1Q;
+    document.getElementById('faq1A').textContent = t().faq1A;
+    document.getElementById('faq2Q').textContent = t().faq2Q;
+    document.getElementById('faq2A').textContent = t().faq2A;
+    document.getElementById('allToolsLink').textContent = lang === 'ja' ? '他のツール一覧' : 'All tools';
+    document.getElementById('allToolsLink').href = 'https://naginata-work.github.io/';
+    document.getElementById('privacyLink').textContent = lang === 'ja' ? 'プライバシーポリシー' : 'Privacy policy';
+    document.getElementById('privacyLink').href = 'https://naginata-work.github.io/privacy.html';
     generate();
   }
 
